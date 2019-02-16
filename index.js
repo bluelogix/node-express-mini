@@ -17,6 +17,7 @@ server.get('/', (req, res) => {
 
 //CRUD OPERATIONS 
 
+//get
 server.get('/api/users', (req, res) => {
     db.find().then(users => {
         res.status(200).json(users);
@@ -25,20 +26,27 @@ server.get('/api/users', (req, res) => {
     })
 })
 
+// post 
 server.post('/api/users', (req, res) => {
    const { name, bio } = req.body;
-    if( !name && !bio ) {
-        res.status(400).json({errorMessage: 'Please provide name and bio for the user.'})
+    if (!name && !bio ) {
+        res.status(400).json({errorMessage: 'Please provide name and bio for the user.'});
     } else {
-        db.add({ name, bio})
+        db.insert({ name, bio })
         .then(user => {
-        res.status(201).json({success: true, user});
+        res.status(201).json(user);
     })
-    .catch(({ code, message }) => {
-        res.status(code).json({ success: false, message})
-})
+    .catch(err  => {
+        res.status(500).json({ 
+            error: 'The users information could not be retrieved'
+        });
+    })
+}
+});
 
-  
+// delete 
+
+
     
 
 //listening to the server 
